@@ -412,5 +412,5 @@ public class SchedulerSimulationSync {
                           SharedResources.executionLog.size() + Colors.RESET);
         System.out.println();
     }
-//FINESH
+//FINESH[[]]
 }
