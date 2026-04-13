@@ -1,8 +1,8 @@
 # Assignment 3 - Complete Documentation
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
-**Date Submitted**: [Submission Date]
+**Student Name**: [LUJAIN ALI ABUDJIN]  
+**Student ID**: [445051961]  
+**Date Submitted**: [2026-04-13]
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Video Link**: [Paste your personal Gmail Google Drive link here]
 
-**Video filename**: `[YourStudentID]_Assignment3_Synchronization.mp4`
+**Video filename**: `[445051961]_Assignment3_Synchronization.mp4`
 
 **Verification**:
 - [ ] Link is accessible (tested in incognito mode)
@@ -31,113 +31,94 @@
 
 Document your development process with **minimum 3 entries** showing progression:
 
-### Entry 1 - [Date, Time]
-**What I implemented**: 
+### Entry 1 - 2026-04-13, 6:00 PM
+**What I implemented**: Added ReentrantLock to protect shared counters (contextSwitchCount, completedProcessCount, totalWaitingTime)
 
-**Challenges encountered**: 
+**Challenges encountered**: Understanding where to place lock() and unlock()
 
-**How I solved it**: 
+**How I solved it**: Used try-finally to ensure the lock is always released
 
-**Testing approach**: 
+**Testing approach**: Ran the program multiple times to check values
 
-**Time spent**: 
-
----
-
-### Entry 2 - [Date, Time]
-**What I implemented**: 
-
-**Challenges encountered**: 
-
-**How I solved it**: 
-
-**Testing approach**: 
-
-**Time spent**: 
+**Time spent**: 20 minutes
 
 ---
 
-### Entry 3 - [Date, Time]
-**What I implemented**: 
+### Entry 2 - 2026-04-13, 6:30 PM
+**What I implemented**: Added ReentrantLock to protect executionLog
 
-**Challenges encountered**: 
+**Challenges encountered**: Preventing ConcurrentModificationException
 
-**How I solved it**: 
+**How I solved it**: Wrapped executionLog.add() inside lock
 
-**Testing approach**: 
+**Testing approach**: Verified no crash during execution
 
-**Time spent**: 
-
----
-
-### Entry 4 - [Date, Time]
-**What I implemented**: 
-
-**Challenges encountered**: 
-
-**How I solved it**: 
-
-**Testing approach**: 
-
-**Time spent**: 
+**Time spent**: 15 minutes
 
 ---
 
-### Entry 5 - [Date, Time]
-**What I implemented**: 
+### Entry 3 - 2026-04-13, 7:00 PM
+**What I implemented**: Added Semaphore to control CPU access
 
-**Challenges encountered**: 
+**Challenges encountered**: Where to place acquire() and release()
 
-**How I solved it**: 
+**How I solved it**: Used acquire() before execution and release() inside finally
 
-**Testing approach**: 
+**Testing approach**: Checked only one process runs at a time
 
-**Time spent**: 
+**Time spent**: 20 minutes
+
+---
+
+### Entry 4 - 2026-04-13, 7:30 PM
+**What I implemented**: Fixed synchronization issues in methods
+
+**Challenges encountered**: Some code didn't work correctly
+
+**How I solved it**: Reviewed and corrected method placement
+
+**Testing approach**: Debugged and tested again
+
+**Time spent**: 15 minutes
+
+---
+
+### Entry 5 - 2026-04-13, 8:00 PM
+**What I implemented**: Final testing and verification
+
+**Challenges encountered**: Ensuring everything runs correctly
+
+**How I solved it**: Re-tested all parts
+
+**Testing approach**: Multiple runs
+
+**Time spent**: 20 minutes
 
 ---
 
 ## Part 2: Technical Questions (1 mark)
 
 ### Question 1: Race Conditions
-**Q**: Identify and explain TWO race conditions in the original code. For each:
-- What shared resource is affected?
-- Why is concurrent access a problem?
-- What incorrect behavior could occur?
 
-**Your Answer**:
-
-[Your answer here - 4-6 sentences with code examples]
+Race conditions occur when multiple threads access shared data at the same time. One example is contextSwitchCount where threads increment it simultaneously, causing incorrect values. Another example is executionLog where multiple threads add data, which may lead to errors or inconsistent output. Concurrent access is a problem because updates can overlap. This may result in lost updates or corrupted data. Synchronization prevents these issues.
 
 ---
 
 ### Question 2: Locks vs Semaphores
-**Q**: Explain the difference between ReentrantLock and Semaphore. Where did you use each in your code and why?
 
-**Your Answer**:
-
-[Your answer here - explain your implementation choices]
+ReentrantLock is used to protect critical sections so only one thread accesses shared data. Semaphore is used to limit the number of threads accessing a resource. I used ReentrantLock for counters and executionLog to prevent race conditions. I used Semaphore to control CPU execution so only one process runs at a time.
 
 ---
 
 ### Question 3: Deadlock Prevention
-**Q**: What is deadlock? Explain TWO prevention techniques and what you did to prevent deadlocks in your code.
 
-**Your Answer**:
-
-[Your answer here - reference try-finally blocks, lock ordering, etc.]
+Deadlock happens when threads wait for each other indefinitely. One prevention method is using try-finally to always release locks. Another method is avoiding nested locks. In my code, I used try-finally to ensure locks and semaphores are released.
 
 ---
 
 ### Question 4: Lock Granularity Design Decision 
-**Q**: For Task 1 (protecting the three counters), explain your lock design choice:
-- Did you use ONE lock for all three counters (coarse-grained) OR separate locks for each counter (fine-grained)?
-- Explain WHY you made this choice
-- What are the trade-offs between the two approaches?
-- Given that the three counters are independent, which approach provides better concurrency and why?
 
-**Your Answer**:
-
-[Your answer here - explain coarse-grained vs fine-grained locking, independence of counters, concurrency implications. Show understanding of when to use each approach. 5-8 sentences expected.]
+I used one lock for all three counters (coarse-grained). This simplifies the design and reduces complexity. However, it limits concurrency because only one thread can access any counter at a time. Fine-grained locking allows better performance but is more complex. Since the counters are independent, fine-grained locking provides better concurrency. But I chose coarse-grained for simplicity and safety.
 
 ---
 
@@ -145,159 +126,137 @@ Document your development process with **minimum 3 entries** showing progression
 
 ### Critical Section #1: Counter Variables
 
-**Which variables**: 
+**Which variables**: contextSwitchCount, completedProcessCount, totalWaitingTime  
 
-**Why they need protection**: 
+**Why they need protection**: Multiple threads modify them causing incorrect results  
 
-**Synchronization mechanism used**: 
-
-**Code snippet**:
-```java
-// Paste your implementation here
-```
-
-**Justification**: 
-
----
-
-### Critical Section #2: Execution Log
-
-**What resource**: 
-
-**Why it needs protection**: 
-
-**Synchronization mechanism used**: 
+**Synchronization mechanism used**: ReentrantLock  
 
 **Code snippet**:
 ```java
-// Paste your implementation here
-```
+lock.lock();
+try {
+    contextSwitchCount++;
+} finally {
+    lock.unlock();
+}
+Justification: Prevents race conditions and ensures accurate updates
 
-**Justification**: 
+Critical Section #2: Execution Log
 
----
+What resource: executionLog
 
-### Critical Section #3: CPU Semaphore
+Why it needs protection: Multiple threads write simultaneously
 
-**Purpose of semaphore**: 
+Synchronization mechanism used: ReentrantLock
 
-**Number of permits and why**: 
+Code snippet:
 
-**Where implemented**: 
+lock.lock();
+try {
+    executionLog.add(message);
+} finally {
+    lock.unlock();
+}
 
-**Code snippet**:
-```java
-// Paste your implementation here
-```
+Justification: Prevents ConcurrentModificationException
 
-**Effect on program behavior**: 
+Critical Section #3: CPU Semaphore
 
----
+Purpose of semaphore: Control number of running processes
 
-## Part 4: Testing and Verification (2 marks)
+Number of permits and why: 1 to allow one process at a time
 
-### Test 1: Consistency Check
-**What I tested**: Running program multiple times to verify consistent results
+Where implemented: Inside run() method
 
-**Testing procedure**: 
-```bash
-# Commands used (run the program at least 5 times)
-```
+Code snippet:
 
-**Results**: 
-(Show that running multiple times produces consistent, correct results)
+cpuSemaphore.acquire();
+try {
+    // execution
+} finally {
+    cpuSemaphore.release();
+}
 
-**Why synchronization is necessary**: 
-(Explain what race conditions COULD occur without synchronization, even if you didn't observe them. Explain which shared resources need protection and why.)
+Effect on program behavior: Ensures controlled execution
 
-**Conclusion**: 
+Part 4: Testing and Verification (2 marks)
+Test 1: Consistency Check
 
----
+Testing procedure:
 
-### Test 2: Exception Testing
-**What I tested**: Checking for ConcurrentModificationException
+Run the program multiple times
 
-**Testing procedure**: 
+Results: Output was consistent
 
-**Results**: 
+Why synchronization is necessary: Without it, shared variables may give incorrect results
 
-**What this proves**: 
+Conclusion: Synchronization works correctly
 
----
+Test 2: Exception Testing
 
-### Test 3: Correctness Verification
-**What I tested**: Verifying correct final values (total burst time, context switches, etc.)
+Testing procedure: Checked executionLog
 
-**Expected values**: 
+Results: No exception occurred
 
-**Actual values**: 
+What this proves: Proper synchronization
 
-**Analysis**: 
+Test 3: Correctness Verification
 
----
+Expected values: Correct totals
 
-### Test 4: Different Scenarios
-**Scenario tested**: [e.g., different time quantum, more processes, etc.]
+Actual values: Matched expected
 
-**Purpose**: 
+Analysis: No errors
 
-**Results**: 
+Test 4: Different Scenarios
 
-**What I learned**: 
+Scenario tested: Different process values
 
----
+Purpose: Check stability
 
-## Part 5: Reflection and Learning
+Results: Program worked correctly
 
-### What I learned about synchronization:
+What I learned: Synchronization improves reliability
 
-[6-8 sentences about key concepts, challenges, insights]
+Part 5: Reflection and Learning
+What I learned about synchronization:
 
----
+I learned how synchronization works in multithreading. I understood race conditions and how they affect programs. I used locks and semaphores to fix these problems. It was difficult at first but became easier. I learned the importance of protecting shared resources. Synchronization helps avoid errors and improve program reliability.
 
-### Real-world applications:
+Real-world applications:
 
-Give TWO examples where synchronization is critical:
+Example 1: Banking systems
+Example 2: Operating systems scheduling
 
-**Example 1**: 
+How I would explain synchronization to others:
 
-**Example 2**: 
+Synchronization is like taking turns. Only one thread uses a resource at a time to avoid problems.
 
----
+Part 6: GitHub Repository Information
 
-### How I would explain synchronization to others:
+Repository URL: [PUT YOUR LINK HERE]
 
-[Explain to someone who just finished Assignment 1 - use simple terms and analogies]
+Number of commits: 3
 
----
+Commit messages:
 
-## Part 6: GitHub Repository Information
+Initial commit
+Added synchronization
+Final submission
+Documentation update
+Summary
 
-**Repository URL**: 
+Total time spent on assignment: 5 hours
 
-**Number of commits**: 
+Key takeaways:
+Learned locks
+Learned semaphores
+Avoid race conditions
 
-**Commit messages**: 
-1. 
-2. 
-3. 
-4. 
+Most challenging aspect: Understanding synchronization
 
----
-
-## Summary
-
-**Total time spent on assignment**: 
-
-**Key takeaways**: 
-1. 
-2. 
-3. 
-
-**Most challenging aspect**: 
-
-**What I'm most proud of**: 
-
+What I'm most proud of: Completing all tasks correctly
 ---
 
 **End of Documentation**
